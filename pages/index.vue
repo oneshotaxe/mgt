@@ -7,6 +7,7 @@
         v-list(dense)
           v-list-item(to="/downloads/report") Отчет
           v-list-item(to="/downloads/magazine") Журнал
+          v-list-item(to="/downloads/magazineNew") Новый журнал
           v-list-item(to="/downloads/magazineMini") Журнал мини
         v-subheader Резервное копирование
         v-list(dense)
