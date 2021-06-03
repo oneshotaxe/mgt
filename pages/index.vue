@@ -9,6 +9,7 @@
           v-list-item(to="/downloads/magazine") Журнал
           v-list-item(to="/downloads/magazineNew") Новый журнал
           v-list-item(to="/downloads/magazineMini") Журнал мини
+          v-list-item(to="/downloads/agreement") Согласие
         v-subheader Резервное копирование
         v-list(dense)
           v-list-item(to="/backup/download") Скачать

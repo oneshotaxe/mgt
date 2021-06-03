@@ -29,7 +29,7 @@
  * Released under the MIT License.
  */
 
-/*! ExcelJS 23-04-2020 */
+/*! ExcelJS 02-06-2020 */
 
 /**
  * Character class utilities for XML NS 1.0 edition 3.
@@ -54,3 +54,7 @@
  * @license MIT
  * @copyright Louis-Dominique Dubeau
  */
+
+//! moment.js
+
+//! moment.js locale configuration
