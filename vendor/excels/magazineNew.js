@@ -193,7 +193,7 @@ function renderLeftHeader(cursor, weekdays = []) {
           cell.fill = {
             type: 'pattern',
             pattern:'solid',
-            fgColor:{argb:'FFFFFF00'}
+            fgColor:{argb:'FFbfbfbf'}
           }
         })
     }
@@ -309,7 +309,7 @@ function renderRightHeader(cursor, weekdays = []) {
           cell.fill = {
             type: 'pattern',
             pattern:'solid',
-            fgColor:{argb:'FFFFFF00'}
+            fgColor:{argb:'FFbfbfbf'}
           }
         })
     }
