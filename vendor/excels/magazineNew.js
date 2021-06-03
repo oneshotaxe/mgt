@@ -12,15 +12,16 @@ export default async function (magazine) {
       fitToPage: true,
       fitToWidth: 1,
       fitToHeight: pageCount + 1,
-      paperSize: 9,
+      paperSize: 8,
       horizontalCentered: true,
       verticalCentered: true,
+      orientation: 'landscape',
       margins: {
         left: 0.2, right: 0.2,
         top: 0.2, bottom: 0.2,
         header: 0, footer: 0
       },
-      printArea: 'A1:Q' + 50 * (pageCount + 1)
+      printArea: 'A1:AQ' + 50 * (pageCount + 1)
     }
   })
   const ws_right = wb.addWorksheet('Right', {
@@ -48,15 +49,82 @@ export default async function (magazine) {
 
 function renderLeftWS(cursor, pages) {
   console.log({ pages })
-  cursor.setColumnWidth([10, 29, 12, 10].concat(new Array(13).fill(4)).concat(new Array(20).fill(4).concat([8, 8, 8, 8])))
+  cursor.setColumnWidth([6, 6, 7, 23, 9, 10].concat(new Array(13).fill(4)).concat(new Array(20).fill(4).concat([8, 8, 8, 8])))
 
   let k = -1;
   let n = Math.floor(pages.length / 2);
   for (let i = 0; i < pages.length ; i++) {
     n = n + i * k;
     k = k * -1;
-    renderLeftPage(cursor.createCursor(1 + 50 * i, 1), pages[n])
+    cursor.getCell(1, 1).value = (pages[n].number + 1) * 2 - 1
+    renderLeftAside(cursor.createCursor(5 + 50 * i, 1), pages[n])
+    renderLeftPage(cursor.createCursor(1 + 50 * i, 3), pages[n])
   }
+}
+
+function renderLeftAside(cursor, page) {
+  // merges
+  new Array(
+    [1, 1, 2, 1],
+    [1, 2, 2, 2]
+  ).forEach(pos => {
+    cursor.mergeCells(pos[0], pos[1], pos[2], pos[3])
+  })
+  new Array(
+    3, 11, 19, 27, 35
+  ).forEach(pos => {
+    cursor.mergeCells(pos, 1, pos + 7, 1)
+    cursor.mergeCells(pos, 2, pos + 7, 2)
+  })
+
+  //font
+  cursor.getArea(1, 1, 1, 2).forEach(cell => {
+    cell.font = {
+      size: 10
+    }
+  })
+  cursor.getArea(3, 1, 42, 2).forEach(cell => {
+    cell.font = {
+      size: 14
+    }
+  })
+
+  //alignment
+  cursor.getCell(1, 1).alignment = {
+    wrapText: true,
+    vertical: 'middle',
+    horizontal: 'center'
+  }
+  cursor.getCell(1, 2).alignment = {
+    wrapText: true,
+    vertical: 'middle',
+    horizontal: 'center'
+  }
+  cursor.getArea(3, 1, 42, 2).forEach(cell => {
+    cell.alignment = {
+      vertical: 'middle',
+      horizontal: 'center',
+      textRotation: 90
+    };
+  })
+
+  //borders
+  cursor.setBordersOnArea('medium', 1, 1, 42, 2)
+
+  fillInfoLeftAside(cursor.createCursor(), page)
+}
+
+function fillInfoLeftAside(cursor, page) {
+  cursor.getCell(1, 1).value = '№ марш.'
+  cursor.getCell(1, 2).value = '№ вых.'
+
+  page.buses.forEach((bus, i) => {
+    const way = bus.way
+    const route = way?.route
+
+    cursor.getCell(3 + i * 8, 1).value = route?.num || ''
+    cursor.getCell(3 + i * 8, 2).value = way?.num || ''
+  })
 }
 
 function renderLeftPage(cursor, page, isEmpty) {
@@ -75,7 +143,6 @@ function renderLeftPage(cursor, page, isEmpty) {
   for (let i = 0; i < 5; i++) {
     renderLeftBus(cursor.createCursor(7 + i * 8, 1), page.buses[i])
   }
-  cursor.getCell(1,1).value = (page.number + 1) * 2 - 1
 }
 
 function renderLeftHeader(cursor, weekdays = []) {
@@ -93,7 +160,7 @@ function renderLeftHeader(cursor, weekdays = []) {
   //font
   cursor.getArea(1, 1, 2, 17).forEach(cell => {
     cell.font = {
-      size: 12
+      size: 10
     }
   })
 
@@ -173,9 +240,22 @@ function fillBusInfo(cursor, bus) {
 }
 
 function fillLeftDriverInfo(cursor, driver) {
+  // alignment
+  cursor.getCell(1, 1).alignment.horizontal = 'center'
+  cursor.getCell(2, 1).alignment.horizontal = 'center'
+
+  // font
+  cursor.getCell(2, 1).font = { size: 10 }
+
+  // content
   cursor.getCell(1, 1).value = driver.name
+  let graphicName = driver.graphic?.name || ''
+  if (graphicName) {
+    graphicName = `${graphicName} (${graphicName[0]}раб. / ${graphicName[1]}вых.)`
+  }
+  cursor.getCell(2, 1).value = graphicName
   cursor.getCell(1, 2).value = driver.num.slice(4)
-  cursor.getCell(2, 2).value = driver.graphic?.name || ''
+  cursor.getCell(2, 2).value = driver.num.slice(0, 3)
 
   for (let i = 0; i < 12; i++) {
     cursor.getCell(1, i + 4).value = driver.statuses[i].value
@@ -188,7 +268,7 @@ function renderRightWS(cursor, pages) {
   for (let i = 0; i < pages.length ; i++) {
     n = n + i * k;
     k = k * -1;
-    renderRightPage(cursor.createCursor(1 + 50 * i, 18), pages[n])
+    renderRightPage(cursor.createCursor(1 + 50 * i, 20), pages[n])
   }
 }
 
@@ -246,7 +326,7 @@ function renderRightHeader(cursor, weekdays = []) {
   //font
   cursor.getArea(1, 1, 2, 24).forEach(cell => {
     cell.font = {
-      size: 12
+      size: 10
     }
   })
 
