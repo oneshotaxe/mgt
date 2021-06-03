@@ -56,7 +56,7 @@ function renderLeftWS(cursor, pages) {
   for (let i = 0; i < pages.length ; i++) {
     n = n + i * k;
     k = k * -1;
-    cursor.getCell(1, 1).value = (pages[n].number + 1) * 2 - 1
+    cursor.getCell(1 + 50 * i, 1).value = (pages[n].number + 1) * 2 - 1
     renderLeftAside(cursor.createCursor(5 + 50 * i, 1), pages[n])
     renderLeftPage(cursor.createCursor(1 + 50 * i, 3), pages[n])
   }
