@@ -133,6 +133,7 @@ app.post('/magazine', async (req, res) => {
     drivers: bus.drivers.map(driver => ({
       num: driver.num,
       name: driver.shortName,
+      fullname: driver.name,
       graphic: driver.graphic,
       statuses: statusesByDate(driver.graphic, req.body.month + '-01', daysInMonth)
     }))

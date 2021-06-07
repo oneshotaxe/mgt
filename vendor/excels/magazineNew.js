@@ -118,13 +118,13 @@ function fillInfoLeftAside(cursor, page) {
   cursor.getCell(1, 1).value = '№ марш.'
   cursor.getCell(1, 2).value = '№ вых.'
 
-  page.buses.forEach((bus, i) => {
-    const way = bus.way
-    const route = way?.route
+  // page.buses.forEach((bus, i) => {
+  //   const way = bus.way
+  //   const route = way?.route
 
-    cursor.getCell(3 + i * 8, 1).value = route?.num || ''
-    cursor.getCell(3 + i * 8, 2).value = way?.num || ''
-  })
+  //   cursor.getCell(3 + i * 8, 1).value = route?.num || ''
+  //   cursor.getCell(3 + i * 8, 2).value = way?.num || ''
+  // })
 }
 
 function renderLeftPage(cursor, page, isEmpty) {
@@ -241,21 +241,29 @@ function fillBusInfo(cursor, bus) {
 
 function fillLeftDriverInfo(cursor, driver) {
   // alignment
-  cursor.getCell(1, 1).alignment.horizontal = 'center'
-  cursor.getCell(2, 1).alignment.horizontal = 'center'
+  cursor.getArea(1, 1, 8, 2).forEach(cell => {
+    cell.alignment.horizontal = 'center'
+    cell.alignment.horizontal = 'center'
+  })
 
   // font
-  cursor.getCell(2, 1).font = { size: 10 }
+  cursor.getCell(1, 1).font = { size: 14, bold: true }
+  cursor.getCell(5, 1).font = { size: 14, bold: true }
+  cursor.getCell(4, 1).font = { size: 10 }
+  cursor.getCell(8, 1).font = { size: 10 }
 
   // content
-  cursor.getCell(1, 1).value = driver.name
+  const [lastname, firstname, middlename] = driver.fullname.split(' ')
+  cursor.getCell(1, 1).value = firstname || ''
+  cursor.getCell(2, 1).value = lastname || ''
+  cursor.getCell(3, 1).value = middlename || ''
   let graphicName = driver.graphic?.name || ''
   if (graphicName) {
     graphicName = `${graphicName} (${graphicName[0]}раб. / ${graphicName[1]}вых.)`
   }
-  cursor.getCell(2, 1).value = graphicName
-  cursor.getCell(1, 2).value = driver.num.slice(4)
-  cursor.getCell(2, 2).value = driver.num.slice(0, 3)
+  cursor.getCell(4, 1).value = graphicName
+  cursor.getCell(1, 2).value = driver.num.slice(0, 4)
+  cursor.getCell(2, 2).value = driver.num.slice(4)
 
   for (let i = 0; i < 12; i++) {
     cursor.getCell(1, i + 4).value = driver.statuses[i].value
@@ -405,13 +413,9 @@ function fillWayInfo(cursor, way) {
 function getDriverPositionsByCount(count) {
   switch (count) {
     case 1:
-      return [5]
+      return [1]
     case 2:
-      return [3, 7]
-    case 3:
-      return [2, 5, 8]
-    case 4:
-      return [2, 4, 6, 8]
+      return [1, 5]
     default:
       return []
   }
