@@ -4,7 +4,7 @@
       v-col
         v-text-field(label="Номер" v-model="model.num")
         v-text-field(label="Ф.И.О." v-model="model.name")
-        v-select(label="Автобус" v-model="model.bus" :items="buses")
+        v-autocomplete(label="Автобус" v-model="model.bus" :items="buses")
       v-col
         graphic-form(v-model="model.graphic")
 </template>
