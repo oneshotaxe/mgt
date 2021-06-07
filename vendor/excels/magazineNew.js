@@ -118,13 +118,15 @@ function fillInfoLeftAside(cursor, page) {
   cursor.getCell(1, 1).value = '№ марш.'
   cursor.getCell(1, 2).value = '№ вых.'
 
-  // page.buses.forEach((bus, i) => {
-  //   const way = bus.way
-  //   const route = way?.route
+  page.buses.forEach((bus, i) => {
+    const way = bus.way
+    const route = way?.route
 
-  //   cursor.getCell(3 + i * 8, 1).value = route?.num || ''
-  //   cursor.getCell(3 + i * 8, 2).value = way?.num || ''
-  // })
+    cursor.getCell(3 + i * 8, 1).font = { size: 14, bold: true }
+    cursor.getCell(3 + i * 8, 2).font = { size: 14, bold: true }
+    cursor.getCell(3 + i * 8, 1).value = route?.num || ''
+    cursor.getCell(3 + i * 8, 2).value = way?.num || ''
+  })
 }
 
 function renderLeftPage(cursor, page, isEmpty) {
@@ -231,6 +233,7 @@ function renderLeftBus(cursor, bus) {
 }
 
 function fillBusInfo(cursor, bus) {
+  cursor.getCell(1, 1).font = { size: 14, bold: true }
   cursor.getCell(1, 1).value = bus.num
 
   const positions = getDriverPositionsByCount(bus.drivers.length)
@@ -251,6 +254,7 @@ function fillLeftDriverInfo(cursor, driver) {
   cursor.getCell(5, 1).font = { size: 14, bold: true }
   cursor.getCell(4, 1).font = { size: 10 }
   cursor.getCell(8, 1).font = { size: 10 }
+  cursor.getCell(2, 2).font = { size: 14, bold: true }
 
   // content
   const [lastname, firstname, middlename] = driver.fullname.split(' ')
