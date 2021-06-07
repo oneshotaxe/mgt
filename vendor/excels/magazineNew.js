@@ -258,8 +258,8 @@ function fillLeftDriverInfo(cursor, driver) {
 
   // content
   const [lastname, firstname, middlename] = driver.fullname.split(' ')
-  cursor.getCell(1, 1).value = firstname || ''
-  cursor.getCell(2, 1).value = lastname || ''
+  cursor.getCell(1, 1).value = lastname || ''
+  cursor.getCell(2, 1).value = firstname || ''
   cursor.getCell(3, 1).value = middlename || ''
   let graphicName = driver.graphic?.name || ''
   if (graphicName) {
